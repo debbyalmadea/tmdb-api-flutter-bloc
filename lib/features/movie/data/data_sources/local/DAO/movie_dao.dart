@@ -11,4 +11,7 @@ abstract class MovieDao {
 
   @Query('SELECT * FROM movie')
   Future<List<MovieModel>> getMovies();
+
+  @Query('SELECT * FROM movie WHERE id = :id')
+  Future<MovieModel?> getMovie(int id);
 }

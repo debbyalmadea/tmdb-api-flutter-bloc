@@ -10,7 +10,7 @@ class MovieEntity extends Equatable {
   final String? releaseDate;
   final List<dynamic>? genreIds;
 
-  const MovieEntity({
+  MovieEntity({
     this.id,
     this.title,
     this.overview,

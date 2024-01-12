@@ -3,7 +3,7 @@ import 'package:flutter_tmdb/features/movie/domain/entities/movie.dart';
 
 @Entity(tableName: 'movie', primaryKeys: ['id'])
 class MovieModel extends MovieEntity {
-  const MovieModel({
+  MovieModel({
     super.id,
     super.title,
     super.overview,

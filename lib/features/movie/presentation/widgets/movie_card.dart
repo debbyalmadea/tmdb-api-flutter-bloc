@@ -4,24 +4,35 @@ import 'package:flutter_tmdb/features/movie/domain/entities/movie.dart';
 
 class MovieCard extends StatelessWidget {
   final MovieEntity movie;
+  final double width;
+  final double height;
+  final void Function(MovieEntity movie)? onMoviePressed;
 
-  const MovieCard({super.key, required this.movie});
+  const MovieCard(
+      {super.key,
+      required this.movie,
+      this.onMoviePressed,
+      this.width = 200,
+      this.height = 300});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _buildImage(),
-        _buildScore(),
-        _buildGradient(),
-      ],
+    return GestureDetector(
+      onTap: _onTap,
+      child: Stack(
+        children: [
+          _buildImage(),
+          _buildScore(),
+          _buildGradient(),
+        ],
+      ),
     );
   }
 
   Widget _buildGradient() {
     return Container(
-      width: 200,
-      height: 300,
+      width: width,
+      height: height,
       margin: const EdgeInsets.only(left: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -61,7 +72,8 @@ class MovieCard extends StatelessWidget {
   Widget _buildImage() {
     return Container(
       margin: const EdgeInsets.only(left: 20),
-      width: 200,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
@@ -70,5 +82,11 @@ class MovieCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onTap() {
+    if (onMoviePressed != null) {
+      onMoviePressed!(movie);
+    }
   }
 }

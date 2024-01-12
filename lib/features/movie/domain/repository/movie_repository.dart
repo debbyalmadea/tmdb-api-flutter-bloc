@@ -8,10 +8,18 @@ class GetMoviesParams {
   GetMoviesParams({this.page, this.sortByOption});
 }
 
+class GetSavedMovieParams {
+  final int id;
+
+  GetSavedMovieParams(this.id);
+}
+
 abstract class MovieRepository {
   Future<DataState<List<MovieEntity>>> getMovies(GetMoviesParams params);
 
   Future<List<MovieEntity>> getSavedMovies();
+
+  Future<MovieEntity?> getSavedMovie(GetSavedMovieParams params);
 
   Future<void> saveMovie(MovieEntity movie);
 

@@ -12,9 +12,18 @@ class GetSavedMovies extends LocalMoviesEvent {
   List<Object?> get props => [];
 }
 
+class GetSavedMovie extends LocalMoviesEvent {
+  final int id;
+  const GetSavedMovie(this.id);
+
+  @override
+  List<Object?> get props => [id];
+}
+
 class RemoveMovie extends LocalMoviesEvent {
   final MovieEntity? movie;
   const RemoveMovie(this.movie);
+
   @override
   List<Object?> get props => [movie];
 }

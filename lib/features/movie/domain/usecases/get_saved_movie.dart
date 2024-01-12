@@ -2,13 +2,13 @@ import 'package:flutter_tmdb/core/usecase/usecase.dart';
 import 'package:flutter_tmdb/features/movie/domain/entities/movie.dart';
 import 'package:flutter_tmdb/features/movie/domain/repository/movie_repository.dart';
 
-class GetSavedMovieUseCase implements UseCase<List<MovieEntity>, void> {
-  final MovieRepository _movieRepository;
+class GetSavedMovieUseCase extends UseCase<MovieEntity?, GetSavedMovieParams?> {
+  final MovieRepository repository;
 
-  GetSavedMovieUseCase(this._movieRepository);
+  GetSavedMovieUseCase(this.repository);
 
   @override
-  Future<List<MovieEntity>> call({void params}) {
-    return _movieRepository.getSavedMovies();
+  Future<MovieEntity?> call({GetSavedMovieParams? params}) {
+    return repository.getSavedMovie(params ?? GetSavedMovieParams(0));
   }
 }

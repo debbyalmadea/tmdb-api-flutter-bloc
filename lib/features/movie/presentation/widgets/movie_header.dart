@@ -5,7 +5,8 @@ import 'package:ionicons/ionicons.dart';
 
 class MovieHeader extends StatelessWidget {
   final MovieEntity movie;
-  const MovieHeader({super.key, required this.movie});
+  final void Function(MovieEntity movie)? onMoviePressed;
+  const MovieHeader({super.key, required this.movie, this.onMoviePressed});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class MovieHeader extends StatelessWidget {
         '$tmdbImageUrl${movie.posterPath}',
         fit: BoxFit.cover,
         width: double.infinity,
-        height: 500,
+        height: 600,
       ),
       _buildGradient(),
       _buildMovieInfo(),
@@ -22,27 +23,43 @@ class MovieHeader extends StatelessWidget {
   }
 
   Widget _buildGradient() {
-    return Container(
-      width: double.infinity,
-      height: 500,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [
-            Colors.black.withOpacity(0.8),
-            Colors.black.withOpacity(0),
-          ],
+    return Stack(children: [
+      Container(
+        width: double.infinity,
+        height: 240,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withOpacity(1),
+              Colors.black.withOpacity(0),
+            ],
+          ),
         ),
       ),
-    );
+      Container(
+        width: double.infinity,
+        height: 600,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Colors.black.withOpacity(1),
+              Colors.black.withOpacity(0),
+            ],
+          ),
+        ),
+      ),
+    ]);
   }
 
   Widget _buildMovieInfo() {
     return Positioned(
       bottom: 30,
       left: 20,
-      width: 320,
+      width: 400,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,66 +92,41 @@ class MovieHeader extends StatelessWidget {
   }
 
   Widget _buildActions() {
-    return Row(
-      children: [
-        Container(
-          height: 40,
-          padding: const EdgeInsets.only(left: 32, right: 24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.red.shade900,
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Detail',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(width: 10),
-              Icon(
-                Ionicons.arrow_forward_outline,
+    return GestureDetector(
+      onTap: _onTap,
+      child: Container(
+        height: 40,
+        width: 200,
+        padding: const EdgeInsets.only(left: 32, right: 24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.red.shade900,
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Detail',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
                 color: Colors.white,
               ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 20),
-        Container(
-          height: 40,
-          padding: const EdgeInsets.only(left: 24, right: 32),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              width: 1,
+            ),
+            SizedBox(width: 10),
+            Icon(
+              Ionicons.arrow_forward_outline,
               color: Colors.white,
             ),
-            color: Colors.transparent,
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Ionicons.add_outline,
-                color: Colors.white,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'My List',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
-      ],
+      ),
     );
+  }
+
+  _onTap() {
+    if (onMoviePressed != null) {
+      onMoviePressed!(movie);
+    }
   }
 }

@@ -26,28 +26,15 @@ class TrendingMovies extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Trending Now',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                'See all',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.red.shade900,
-                ),
-              ),
-            ],
+        const Padding(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Text(
+            'Trending Now',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
           ),
         ),
         const SizedBox(height: 20),
@@ -59,7 +46,11 @@ class TrendingMovies extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: movies.length,
                   itemBuilder: (context, index) {
-                    return MovieCard(movie: movies[index]);
+                    return MovieCard(
+                      movie: movies[index],
+                      onMoviePressed: (movie) =>
+                          _onMoviePressed(context, movie),
+                    );
                   },
                 ),
         ),
@@ -69,19 +60,19 @@ class TrendingMovies extends StatelessWidget {
 
   _buildBody() {
     return BlocBuilder<RemoteMoviesBloc, RemoteMoviesState>(
-      builder: (_, state) {
+      builder: (context, state) {
         if (state is RemoteMoviesLoading) {
           return Column(
             children: [
               Container(
                 width: double.infinity,
-                height: 500,
+                height: 600,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      Colors.black.withOpacity(0.8),
+                      Colors.black.withOpacity(1),
                       Colors.black.withOpacity(0),
                     ],
                   ),
@@ -104,11 +95,13 @@ class TrendingMovies extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                child: randomMovie != null
-                    ? MovieHeader(movie: randomMovie)
-                    : const SizedBox.shrink(),
-              ),
+              randomMovie != null
+                  ? MovieHeader(
+                      movie: randomMovie,
+                      onMoviePressed: (movie) {
+                        _onMoviePressed(context, movie);
+                      })
+                  : const SizedBox.shrink(),
               _movieListSection(state.movies),
             ],
           );
@@ -120,41 +113,39 @@ class TrendingMovies extends StatelessWidget {
   }
 
   _buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(80),
-      child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Container(
-          alignment: Alignment.center,
-          margin:
-              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Icon(
-            Ionicons.menu_outline,
-            color: Colors.white,
-          ),
+    return AppBar(
+      leading: Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () => {},
+        child: const Icon(
+          Ionicons.menu_outline,
+          color: Colors.white,
+        ),
+      ),
+      actions: [
+        GestureDetector(
+          onTap: () => {},
+          child: Container(
+            width: 40,
+            height: 40,
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(left: 20, right: 20),
             child: Container(
-              width: 40,
-              height: 40,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey,
-                ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  void _onMoviePressed(BuildContext context, MovieEntity movie) {
+    Navigator.pushNamed(context, '/movie-detail', arguments: movie);
   }
 }

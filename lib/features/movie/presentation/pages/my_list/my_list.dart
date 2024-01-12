@@ -15,10 +15,8 @@ class MyList extends StatelessWidget {
     return BlocProvider<LocalMoviesBloc>(
       create: (context) => sl()..add(const GetSavedMovies()),
       child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: _buildBody(),
-          ),
+        body: SingleChildScrollView(
+          child: _buildBody(),
         ),
       ),
     );
@@ -26,7 +24,7 @@ class MyList extends StatelessWidget {
 
   _buildBody() {
     return BlocBuilder<LocalMoviesBloc, LocalMoviesState>(
-      builder: (_, state) {
+      builder: (context, state) {
         if (state is LocalMoviesLoading) {
           return Column(
             children: [
@@ -49,7 +47,7 @@ class MyList extends StatelessWidget {
         }
 
         if (state is LocalMoviesLoaded) {
-          return _myListSection(state.movies);
+          return _myListSection(state.movies, context);
         }
 
         return const SizedBox.shrink();
@@ -57,7 +55,7 @@ class MyList extends StatelessWidget {
     );
   }
 
-  Widget _myListSection(List<MovieEntity>? movies) {
+  Widget _myListSection(List<MovieEntity>? movies, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,24 +67,42 @@ class MyList extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),
         const SizedBox(height: 20),
-        SizedBox(
-          height: 300,
-          child: movies == null
-              ? const Text('No movie')
-              : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: movies.length,
-                  itemBuilder: (context, index) {
-                    return MovieCard(movie: movies[index]);
-                  },
+        movies == null
+            ? const Text(
+                'No movie',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
                 ),
-        ),
+              )
+            : GridView.count(
+                padding: const EdgeInsets.only(right: 20),
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                childAspectRatio: 1,
+                mainAxisSpacing: 20,
+                physics: const NeverScrollableScrollPhysics(),
+                children: movies
+                    .map((movie) => MovieCard(
+                          movie: movie,
+                          onMoviePressed: (movie) =>
+                              _onMoviePressed(context, movie),
+                          width: 190,
+                          height: 285,
+                        ))
+                    .toList(),
+              ),
       ],
     );
+  }
+
+  void _onMoviePressed(BuildContext context, MovieEntity movie) {
+    Navigator.pushNamed(context, '/movie-detail', arguments: movie);
   }
 }

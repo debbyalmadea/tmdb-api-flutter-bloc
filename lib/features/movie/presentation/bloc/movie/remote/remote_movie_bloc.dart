@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tmdb/core/resources/data_state.dart';
 import 'package:flutter_tmdb/features/movie/domain/repository/movie_repository.dart';
-import 'package:flutter_tmdb/features/movie/domain/usecases/get_movie.dart';
+import 'package:flutter_tmdb/features/movie/domain/usecases/get_movies.dart';
 import 'package:flutter_tmdb/features/movie/presentation/bloc/movie/remote/remote_movie_event.dart';
 import 'package:flutter_tmdb/features/movie/presentation/bloc/movie/remote/remote_movie_state.dart';
 

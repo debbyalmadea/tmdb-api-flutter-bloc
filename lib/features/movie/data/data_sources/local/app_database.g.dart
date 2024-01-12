@@ -157,6 +157,21 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
+  Future<MovieModel?> getMovie(int id) async {
+    return _queryAdapter.query('SELECT * FROM movie WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => MovieModel(
+            id: row['id'] as int?,
+            title: row['title'] as String?,
+            overview: row['overview'] as String?,
+            posterPath: row['posterPath'] as String?,
+            voteAverage: row['voteAverage'] as double?,
+            voteCount: row['voteCount'] as int?,
+            releaseDate: row['releaseDate'] as String?,
+            genreIds: _stringListConverter.decode(row['genreIds'] as String)),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertMovie(MovieModel movie) async {
     await _movieModelInsertionAdapter.insert(movie, OnConflictStrategy.abort);
   }

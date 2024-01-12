@@ -34,8 +34,9 @@ class MovieRepositoryImpl implements MovieRepository {
         List<MovieModel> movies = [];
         var jsonResponse = jsonDecode(response.body);
 
-        jsonResponse['results'].forEach((movie) {
-          movies.add(MovieModel.fromJson(movie));
+        jsonResponse['results'].forEach((movie) async {
+          MovieModel movieModel = MovieModel.fromJson(movie!);
+          movies.add(movieModel);
         });
 
         return DataSuccess(movies);
@@ -55,12 +56,24 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
+  Future<MovieModel?> getSavedMovie(GetSavedMovieParams params) {
+    try {
+      return _appDatabase.movieDAO.getMovie(params.id);
+    } catch (e) {
+      debugPrintStack();
+      return Future.value(null);
+    }
+  }
+
+  @override
   Future<void> removeMovie(MovieEntity movie) {
-    return _appDatabase.movieDAO.deleteMovie(MovieModel.fromEntity(movie));
+    _appDatabase.movieDAO.deleteMovie(MovieModel.fromEntity(movie));
+    return Future.value();
   }
 
   @override
   Future<void> saveMovie(MovieEntity movie) {
-    return _appDatabase.movieDAO.insertMovie(MovieModel.fromEntity(movie));
+    _appDatabase.movieDAO.insertMovie(MovieModel.fromEntity(movie));
+    return Future.value();
   }
 }

@@ -7,7 +7,7 @@ abstract class LocalMoviesState extends Equatable {
   const LocalMoviesState({this.movies});
 
   @override
-  List<Object> get props => [movies!];
+  List<Object> get props => [movies ?? []];
 }
 
 class LocalMoviesLoading extends LocalMoviesState {
@@ -16,4 +16,21 @@ class LocalMoviesLoading extends LocalMoviesState {
 
 class LocalMoviesLoaded extends LocalMoviesState {
   const LocalMoviesLoaded(List<MovieEntity> movies) : super(movies: movies);
+}
+
+class LocalMovieLoading extends LocalMoviesState {
+  const LocalMovieLoading();
+}
+
+class LocalMovieLoaded extends LocalMoviesState {
+  LocalMovieLoaded(MovieEntity? movie)
+      : super(movies: movie != null ? [movie] : []);
+}
+
+class LocalMovieSaved extends LocalMoviesState {
+  LocalMovieSaved(MovieEntity movie) : super(movies: [movie]);
+}
+
+class LocalMovieRemoved extends LocalMoviesState {
+  LocalMovieRemoved(MovieEntity movie) : super(movies: [movie]);
 }
